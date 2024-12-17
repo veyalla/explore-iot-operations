@@ -27,4 +27,5 @@ RUN wget https://github.com/derailed/k9s/releases/download/v0.28.0/k9s_Linux_amd
     rm -rf k9s_Linux_amd64.tar.gz
 
 # Install Starship prompt
-RUN curl -sS https://starship.rs/install.sh | sh -s -- --version 1.21.1
+RUN curl -sS https://starship.rs/install.sh | sh -s -- --version v1.21.1 --yes
+
