@@ -12,4 +12,6 @@ k3d cluster create \
 -p '1883:1883@loadbalancer' \
 -p '8883:8883@loadbalancer'
 
+eval "$(starship init bash)"
+
 echo "Ending On Create Command"
