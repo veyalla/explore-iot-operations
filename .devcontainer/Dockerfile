@@ -1,10 +1,5 @@
 FROM --platform=linux/amd64 ubuntu
 
-# Ensure the chosen UID is unique. If UID 1000 is taken, choose a different UID, for example 1010.
-ARG USERNAME=iotopser
-ARG USER_UID=1010
-ARG USER_GID=$USER_UID
-
 # Install required packages
 RUN apt-get update && apt-get install -y mosquitto-clients wget && rm -rf /var/lib/apt/lists/*
 
@@ -31,11 +26,5 @@ RUN wget https://github.com/derailed/k9s/releases/download/v0.28.0/k9s_Linux_amd
     chmod +x /usr/local/bin/k9s && \
     rm -rf k9s_Linux_amd64.tar.gz
 
-# Create a non-root user named iotopser with a unique UID
-RUN groupadd --gid $USER_GID $USERNAME && \
-    useradd -m -u $USER_UID -g $USER_GID $USERNAME && \
-    chown -R $USERNAME:$USERNAME /home/$USERNAME
-
-USER $USERNAME
-WORKDIR /home/$USERNAME
-ENTRYPOINT ["bash"]
+# Install Starship prompt
+RUN curl -sS https://starship.rs/install.sh | sh -s -- --version 1.21.1
