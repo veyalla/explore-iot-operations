@@ -1,20 +1,25 @@
-FROM --platform=linux/amd64 ubuntu 
+FROM --platform=linux/amd64 ubuntu
 
-# Install mosquitto client
-RUN apt-get update && apt-get install mosquitto-clients -y && apt-get install -y wget
+# Install mosquitto client and necessary packages
+RUN apt-get update && apt-get install -y mosquitto-clients wget && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Step CLI
-RUN wget https://dl.smallstep.com/gh-release/cli/docs-cli-install/v0.23.4/step-cli_0.23.4_amd64.deb && \
-    apt-get install ./step-cli_0.23.4_amd64.deb && \
-    rm ./step-cli_0.23.4_amd64.deb
+RUN apt-get update && \
+    wget https://dl.smallstep.com/gh-release/cli/docs-cli-install/v0.23.4/step-cli_0.23.4_amd64.deb && \
+    apt-get install -y ./step-cli_0.23.4_amd64.deb && \
+    rm ./step-cli_0.23.4_amd64.deb && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Dapr CLI
 RUN wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | /bin/bash
 
 # Install mqttui
-RUN wget https://github.com/EdJoPaTo/mqttui/releases/download/v0.21.1/mqttui-v0.21.1-x86_64-unknown-linux-gnu.deb && \
-    apt-get install ./mqttui-v0.21.1-x86_64-unknown-linux-gnu.deb && \
-    rm -rf ./mqttui-v0.21.1-x86_64-unknown-linux-gnu.deb
+RUN apt-get update && \
+    wget https://github.com/EdJoPaTo/mqttui/releases/download/v0.21.1/mqttui-v0.21.1-x86_64-unknown-linux-gnu.deb && \
+    apt-get install -y ./mqttui-v0.21.1-x86_64-unknown-linux-gnu.deb && \
+    rm -rf ./mqttui-v0.21.1-x86_64-unknown-linux-gnu.deb && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install k9s
 RUN wget https://github.com/derailed/k9s/releases/download/v0.28.0/k9s_Linux_amd64.tar.gz && \
@@ -22,4 +27,10 @@ RUN wget https://github.com/derailed/k9s/releases/download/v0.28.0/k9s_Linux_amd
     chmod +x /usr/local/bin/k9s && \
     rm -rf k9s_Linux_amd64.tar.gz
 
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Create a non-root user named iotopser
+RUN useradd -m -u 1000 iotopser && \
+    chown -R iotopser:iotopser /home/iotopser
+
+USER iotopser
+WORKDIR /home/iotopser
+ENTRYPOINT ["bash"]
