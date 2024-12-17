@@ -1,8 +1,12 @@
 FROM --platform=linux/amd64 ubuntu
 
-# Install mosquitto client and necessary packages
-RUN apt-get update && apt-get install -y mosquitto-clients wget && \
-    rm -rf /var/lib/apt/lists/*
+# Ensure the chosen UID is unique. If UID 1000 is taken, choose a different UID, for example 1010.
+ARG USERNAME=iotopser
+ARG USER_UID=1010
+ARG USER_GID=$USER_UID
+
+# Install required packages
+RUN apt-get update && apt-get install -y mosquitto-clients wget && rm -rf /var/lib/apt/lists/*
 
 # Install Step CLI
 RUN apt-get update && \
@@ -27,10 +31,11 @@ RUN wget https://github.com/derailed/k9s/releases/download/v0.28.0/k9s_Linux_amd
     chmod +x /usr/local/bin/k9s && \
     rm -rf k9s_Linux_amd64.tar.gz
 
-# Create a non-root user named iotopser
-RUN useradd -m -u 1000 iotopser && \
-    chown -R iotopser:iotopser /home/iotopser
+# Create a non-root user named iotopser with a unique UID
+RUN groupadd --gid $USER_GID $USERNAME && \
+    useradd -m -u $USER_UID -g $USER_GID $USERNAME && \
+    chown -R $USERNAME:$USERNAME /home/$USERNAME
 
-USER iotopser
-WORKDIR /home/iotopser
+USER $USERNAME
+WORKDIR /home/$USERNAME
 ENTRYPOINT ["bash"]
