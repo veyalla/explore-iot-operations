@@ -3,10 +3,10 @@ FROM --platform=linux/amd64 ubuntu
 # Install required packages
 RUN apt-get update && apt-get install -y mosquitto-clients wget && rm -rf /var/lib/apt/lists/*
 
-# Install Step CLI
+# Install Step CLI and cURL
 RUN apt-get update && \
     wget https://dl.smallstep.com/gh-release/cli/docs-cli-install/v0.23.4/step-cli_0.23.4_amd64.deb && \
-    apt-get install -y ./step-cli_0.23.4_amd64.deb && \
+    apt-get install -y ./step-cli_0.23.4_amd64.deb curl && \
     rm ./step-cli_0.23.4_amd64.deb && \
     rm -rf /var/lib/apt/lists/*
 
