@@ -1,4 +1,5 @@
 echo 'export CLUSTER_NAME=${CODESPACE_NAME%-*}' >> ~/.bashrc
+echo 'export CODESPACES=FALSE' >> ~/.bashrc
 echo 'eval "$(starship init bash)"' >> ~/.bashrc
 source ~/.bashrc
 
