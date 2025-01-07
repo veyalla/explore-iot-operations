@@ -17,7 +17,14 @@
       "installBicep": true,
       "version": "latest"
     },
-    "ghcr.io/rio/features/k3d:1": {}
+    "ghcr.io/rio/features/k3d:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": true,
+      "azureDnsAutoDetection": true,
+      "installDockerBuildx": true,
+      "version": "latest",
+      "dockerDashComposeVersion": "none"
+    }
   },
   "secrets": {
     "SUBSCRIPTION_ID": {
