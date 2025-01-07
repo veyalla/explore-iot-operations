@@ -28,7 +28,7 @@ RUN wget https://github.com/EdJoPaTo/mqttui/releases/download/v0.21.1/mqttui-v0.
     && rm -rf /var/lib/apt/lists/*
 
 # Install k9s
-RUN wget https://github.com/derailed/k9s/releases/download/v0.28.0/k9s_Linux_amd64.tar.gz \
+RUN wget https://github.com/derailed/k9s/releases/download/v0.32.7/k9s_Linux_amd64.tar.gz \
     && tar xf k9s_Linux_amd64.tar.gz --directory=/usr/local/bin k9s \
     && chmod +x /usr/local/bin/k9s \
     && rm -rf k9s_Linux_amd64.tar.gz
