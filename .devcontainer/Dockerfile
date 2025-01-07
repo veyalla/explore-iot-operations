@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/universal:2-linux
+FROM ubuntu
 
 # Install mosquitto client
 RUN apt-get update && apt-get install mosquitto-clients -y
