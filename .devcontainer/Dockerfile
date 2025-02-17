@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM mcr.microsoft.com/devcontainers/base:0-ubuntu-22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
