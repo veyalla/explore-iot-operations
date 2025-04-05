@@ -229,6 +229,10 @@ resolve_codespace_name() {
 resolve_resource_names() {
     print_info "Resolving resource names..."
 
+    # Compute additional randomness from hostname (first 4 characters of SHA256 hash)
+    RANDOM_SUFFIX=$(echo "$HOSTNAME" | tr '[:upper:]' '[:lower:]' | sha256sum | cut -c1-4)
+    print_info "Using additional random suffix from hostname: $RANDOM_SUFFIX"
+
     # Resource Group
     if [ -z "$RESOURCE_GROUP" ]; then
         if [ "$NON_INTERACTIVE" = false ]; then
@@ -237,11 +241,11 @@ resolve_resource_names() {
                 RESOURCE_GROUP="$input_rg"
                 print_info "Using provided Resource Group name: $RESOURCE_GROUP"
             else
-                RESOURCE_GROUP="${CODESPACE_NAME}-rg"
+                RESOURCE_GROUP="${CODESPACE_NAME}${RANDOM_SUFFIX}-rg"
                 print_info "No Resource Group provided. Derived name: $RESOURCE_GROUP"
             fi
         else
-            RESOURCE_GROUP="${CODESPACE_NAME}-rg"
+            RESOURCE_GROUP="${CODESPACE_NAME}${RANDOM_SUFFIX}-rg"
             print_info "Non-interactive mode: Derived Resource Group name: $RESOURCE_GROUP"
         fi
     else
@@ -255,10 +259,6 @@ resolve_resource_names() {
     fi
     UNIQUE_SUFFIX=${UNIQUE_SUFFIX:0:16}
     print_info "Using Unique Suffix: $UNIQUE_SUFFIX"
-
-    # Additional randomness from hostname: first 4 characters of SHA256 hash.
-    RANDOM_SUFFIX=$(echo "$HOSTNAME" | tr '[:upper:]' '[:lower:]' | sha256sum | cut -c1-4)
-    print_info "Using additional random suffix from hostname: $RANDOM_SUFFIX"
 
     # Derive Storage Account name (max 24 characters).
     STORAGE_ACCOUNT="st${UNIQUE_SUFFIX}${RANDOM_SUFFIX}"
